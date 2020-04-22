@@ -59,7 +59,7 @@ public class Gantt extends PApplet
 			noStroke();
 			col = map(i,0,11,0,330);
 			start = map(t.getStart(),1,30,gap,width - border);
-			end = map(t.getEnd()-t.getStart(),0,30,0,width - gap - border);
+			end = map(t.getEnd()-t.getStart(),1,30,20,width - gap - border);
 			y = map(i,0,task.size(),border +20 , height - gap);
 			fill(col,255,255);
 			rect(start,y,end,30);
@@ -90,27 +90,26 @@ public class Gantt extends PApplet
 		int difference = t.getEnd() - t.getStart();
 		start = map(t.getStart(),1,30,gap,width - border);
 		end = map(t.getEnd(),1,30,gap,width - border);
-		if(mouseX < start + 20 && t.getStart() > 1 && (pmouseX - mouseX ) > 0 && difference > 1)
+		if(mouseX < start + 20 && t.getStart() > 1 && (pmouseX - mouseX ) > 0 && start >= gap)
 		{
-			println("start");
 			t.setStart(t.getStart()-1);
 			
 		}
-		if(mouseX < end && mouseX > end - 20 && t.getEnd() < 31 && (pmouseX - mouseX) < 0 && difference > 1)
+		if(mouseX < end  && mouseX > end - 20 && t.getEnd() < 31 && (pmouseX - mouseX) < 0)
 		{
-			println("end");
 			t.setEnd(t.getEnd()+1);
 		}
-		if( mouseX < start + 20 && t.getStart() > 1 && (pmouseX - mouseX ) < 0 && difference > 1)
+		if( mouseX < start + 20 && t.getStart() < t.getEnd() && (pmouseX - mouseX ) < 0 && difference > 1)
 		{
-			println("start");
 			t.setStart(t.getStart()+1);
-			
 		}
-		if(mouseX < end && mouseX > end - 20 && t.getEnd() < 31 && (pmouseX - mouseX) > 0 && difference > 1)
+		if(mouseX > end - 20 && t.getEnd() >t.getStart()  && (pmouseX - mouseX) > 0 )
 		{
-			println("end");
 			t.setEnd(t.getEnd()-1);
+			if(t.getStart() == t.getEnd())
+			{
+				t.setEnd(t.getEnd() + 1);
+			}
 		}
 	}
 
