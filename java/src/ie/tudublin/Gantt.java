@@ -9,6 +9,13 @@ import processing.data.TableRow;
 public class Gantt extends PApplet
 {	
 	ArrayList<Task> task = new ArrayList<Task>();
+	float col;
+	float gap = 150;
+	float border = 50;
+	int days= 31;
+	float start=0;
+	float end=0;
+	float y=0;
 	
 	public void settings()
 	{
@@ -36,48 +43,49 @@ public class Gantt extends PApplet
 
 	public void displayTasks()
 	{
-		float gap = 150;
-		float border = (float) (height * 0.05);
-		int days= 31;
-		int p;
-		int q;
-		float col;
 		stroke(255);
 		for(int i=1;i<days;i++)
 		{
 			float x = map(i,1,30,gap,width-border);
 			line(x, border, x, height - border);
 			textAlign(CENTER);
-			text(i, x, 15);
+			text(i, x, 30);
 		}
+
 		for(int i=0;i<task.size();i++)
 		{
 			Task t = task.get(i);
-			p = t.getStart();
-			q = t.getEnd();
-			q = q - p;
 			noStroke();
 			col = map(i,0,11,0,330);
-			float start = map(p,1,30,gap,width - border);
-			float end = map(q,0,30,0,width - gap - border);
-			float y = map(i,0,task.size(),border +20 , height - gap);
+			start = map(t.getStart(),1,30,gap,width - border);
+			end = map(t.getEnd()-t.getStart(),0,30,0,width - gap - border);
+			y = map(i,0,task.size(),border +20 , height - gap);
 			fill(col,255,255);
 			rect(start,y,end,30);
 			fill(255);
 			text(t.getTask(),75,y+15);
 		}
 
-		
-
 	}
 	
 	public void mousePressed()
 	{
-		println("Mouse pressed");	
+		for(int i = 0; i < task.size(); i ++)
+		{
+			Task t = task.get(i);
+			start = map(t.getStart(),1,30,gap,width - border);
+			end = map(t.getEnd(),1,30,gap,width - border);
+			y = map(i,0,task.size(),border +20 , height - gap);
+			if(mouseY > y && mouseY < y + 30 && mouseX > start && mouseX < end)
+			{
+				println("Mouse pressed");
+			}
+		}	
 	}
 
 	public void mouseDragged()
 	{
+		
 		println("Mouse dragged");
 	}
 
@@ -94,5 +102,7 @@ public class Gantt extends PApplet
 	{			
 		background(0);
 		displayTasks();
+	
+		
 	}
 }
